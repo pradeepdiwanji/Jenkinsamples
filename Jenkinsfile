@@ -6,22 +6,49 @@ node {
         stage ('Clone') {
         	checkout scm
         }
-        /*stage ('Upload file') {
+         stage ('Artifactory configuration') {
             steps {
-                rtUpload (
-                    // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
-                    serverId: SERVER_ID,
-                    spec: """{
-                            "files": [
-                                    {
-                                        "pattern": "jenkins-examples/pipeline-examples/resources/ArtifactoryPipeline.zip",
-                                        "target": "local-repo-maven"
-                                    }
-                                ]
-                            }"""
+                rtServer (
+                    id: "ARTIFACTORY_SERVER",
+                    url: http://localhost:8082/artifactory,
+                    credentialsId: 'admin'
+                )
+
+                rtMavenDeployer (
+                    id: "MAVEN_DEPLOYER",
+                    serverId: "ARTIFACTORY_SERVER",
+                    releaseRepo: 'local-repo-maven',
+                    snapshotRepo: 'local-repo-maven'
+                )
+
+                rtMavenResolver (
+                    id: "MAVEN_RESOLVER",
+                    serverId: "ARTIFACTORY_SERVER",
+                    releaseRepo: 'local-repo-maven',
+                    snapshotRepo: 'local-repo-maven'
                 )
             }
-        }*/
+        }
+
+        stage ('Exec Maven') {
+            steps {
+                rtMavenRun (
+                    tool: MAVEN_TOOL, // Tool name from Jenkins configuration
+                    pom: 'pom.xml',
+                    goals: 'clean install',
+                    deployerId: "MAVEN_DEPLOYER",
+                    resolverId: "MAVEN_RESOLVER"
+                )
+            }
+        }
+
+        stage ('Publish build info') {
+            steps {
+                rtPublishBuildInfo (
+                    serverId: "ARTIFACTORY_SERVER"
+                )
+            }
+        }
         stage ('Build') {
         	sh "echo 'shell scripts to build project...'"
         }
