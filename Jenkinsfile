@@ -14,7 +14,7 @@ node {
                     spec: """{
                             "files": [
                                     {
-                                        //"pattern": "jenkins-examples/pipeline-examples/resources/ArtifactoryPipeline.zip",
+                                        "pattern": "jenkins-examples/pipeline-examples/resources/ArtifactoryPipeline.zip",
                                         "target": "local-repo-maven"
                                     }
                                 ]
