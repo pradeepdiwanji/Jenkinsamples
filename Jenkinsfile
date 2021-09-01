@@ -11,7 +11,7 @@ node {
                 rtServer (
                     id: "ARTIFACTORY_SERVER",
                     url: 'http://localhost:8082/artifactory',
-                    credentialsId: 'admin'
+                    credentialsId: 'admin_pradeep_artifactory'
                 )
 
                 rtMavenDeployer (
