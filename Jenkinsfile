@@ -9,7 +9,7 @@ node {
          stage ('Artifactory configuration') {
             steps {
                 rtServer (
-                    id: "ARTIFACTORY_SERVER",
+                    id: "localhost",
                     url: 'http://localhost:8082/artifactory',
                     credentialsId: 'admin_pradeep_artifactory'
                 )
