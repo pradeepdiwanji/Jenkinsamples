@@ -6,7 +6,7 @@ node {
         stage ('Clone') {
         	checkout scm
         }
-        stage ('Upload file') {
+        /*stage ('Upload file') {
             steps {
                 rtUpload (
                     // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
@@ -21,7 +21,7 @@ node {
                             }"""
                 )
             }
-        }
+        }*/
         stage ('Build') {
         	sh "echo 'shell scripts to build project...'"
         }
