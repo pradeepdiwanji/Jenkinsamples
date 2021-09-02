@@ -18,15 +18,15 @@ pipeline {
                 rtMavenDeployer (
                     id: "MAVEN_DEPLOYER",
                     serverId: 'localhost',
-                    releaseRepo: ARTIFACTORY_LOCAL_RELEASE_REPO,
-                    snapshotRepo: ARTIFACTORY_LOCAL_SNAPSHOT_REPO
+                    releaseRepo: 'local-repo-maven',
+                    snapshotRepo: 'local-repo-maven'
                 )
 
                 rtMavenResolver (
                     id: "MAVEN_RESOLVER",
                     serverId: 'localhost',
-                    releaseRepo: ARTIFACTORY_VIRTUAL_RELEASE_REPO,
-                    snapshotRepo: ARTIFACTORY_VIRTUAL_SNAPSHOT_REPO
+                    releaseRepo: 'local-repo-maven',
+                    snapshotRepo: 'local-repo-maven'
                 )
             }
         }
