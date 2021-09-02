@@ -33,8 +33,12 @@ pipeline {
 
         stage ('Exec Maven') {
             steps {
+            environment {
+                   //MAVEN_HOME = '/usr/local/Cellar/maven/3.8.2/libexec'
+                   JAVA_HOME= '/Applications/Eclipse JEE.app/Contents/Eclipse/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.macosx.x86_64_16.0.1.v20210528-1205/jre'
+                   }
                 rtMavenRun (
-                    tool: Maven3, // Tool name from Jenkins configuration
+                    tool: 'Maven3', // Tool name from Jenkins configuration
                     pom: 'maven-examples/maven-example/pom.xml',
                     goals: 'clean install',
                     deployerId: "MAVEN_DEPLOYER",
