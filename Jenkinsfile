@@ -10,21 +10,21 @@ pipeline {
         stage ('Artifactory configuration') {
             steps {
                 rtServer (
-                    id: "localhost",
-                    url: http://localhost:8082/artifactory,
-                    credentialsId: admin_pradeep_artifactory
+                    id: 'localhost',
+                    url: 'http://localhost:8082/artifactory',
+                    credentialsId: 'admin_pradeep_artifactory'
                 )
 
                 rtMavenDeployer (
                     id: "MAVEN_DEPLOYER",
-                    serverId: "localhost",
+                    serverId: 'localhost',
                     releaseRepo: ARTIFACTORY_LOCAL_RELEASE_REPO,
                     snapshotRepo: ARTIFACTORY_LOCAL_SNAPSHOT_REPO
                 )
 
                 rtMavenResolver (
                     id: "MAVEN_RESOLVER",
-                    serverId: "localhost",
+                    serverId: 'localhost',
                     releaseRepo: ARTIFACTORY_VIRTUAL_RELEASE_REPO,
                     snapshotRepo: ARTIFACTORY_VIRTUAL_SNAPSHOT_REPO
                 )
@@ -46,7 +46,7 @@ pipeline {
         stage ('Publish build info') {
             steps {
                 rtPublishBuildInfo (
-                    serverId: "localhost"
+                    serverId: 'localhost'
                 )
             }
         }
