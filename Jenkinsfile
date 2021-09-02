@@ -1,55 +1,54 @@
-node {
-    // Clean workspace before doing anything
-    deleteDir()
-
-    try {
+pipeline {
+    agent any
+    stages {
         stage ('Clone') {
-            checkout scm
-        }
-        stage ('Build') {
-           // sh "echo 'shell scripts to build project...'"
-            sh 'make' 
-            archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-        }
-        stage ('Tests') {
-            parallel 'static': {
-                sh "echo 'shell scripts to run static tests...'"
-            },
-            'unit': {
-                sh "echo 'shell scripts to run unit tests...'"
-            },
-            'integration': {
-                sh "echo 'shell scripts to run integration tests...'"
+            steps {
+                git branch: 'master', url: "https://github.com/jfrog/project-examples.git"
             }
         }
-        stage ('Deploy') {
-            sh "echo 'shell scripts to deploy to server...'"
-        }
+
         stage ('Artifactory configuration') {
             steps {
                 rtServer (
                     id: "localhost",
-                    url: 'http://localhost:8082/artifactory',
-                    credentialsId: 'admin_pradeep_artifactory'
+                    url: http://localhost:8082/artifactory,
+                    credentialsId: admin_pradeep_artifactory
                 )
 
                 rtMavenDeployer (
                     id: "MAVEN_DEPLOYER",
                     serverId: "localhost",
-                    releaseRepo: 'local-repo-maven',
-                    snapshotRepo: 'local-repo-maven'
+                    releaseRepo: ARTIFACTORY_LOCAL_RELEASE_REPO,
+                    snapshotRepo: ARTIFACTORY_LOCAL_SNAPSHOT_REPO
                 )
 
                 rtMavenResolver (
                     id: "MAVEN_RESOLVER",
                     serverId: "localhost",
-                    releaseRepo: 'local-repo-maven',
-                    snapshotRepo: 'local-repo-maven'
+                    releaseRepo: ARTIFACTORY_VIRTUAL_RELEASE_REPO,
+                    snapshotRepo: ARTIFACTORY_VIRTUAL_SNAPSHOT_REPO
                 )
             }
         }
-    } catch (err) {
-        currentBuild.result = 'FAILED'
-        throw err
+
+        stage ('Exec Maven') {
+            steps {
+                rtMavenRun (
+                    tool: Maven3, // Tool name from Jenkins configuration
+                    pom: 'maven-examples/maven-example/pom.xml',
+                    goals: 'clean install',
+                    deployerId: "MAVEN_DEPLOYER",
+                    resolverId: "MAVEN_RESOLVER"
+                )
+            }
+        }
+
+        stage ('Publish build info') {
+            steps {
+                rtPublishBuildInfo (
+                    serverId: "localhost"
+                )
+            }
+        }
     }
 }
