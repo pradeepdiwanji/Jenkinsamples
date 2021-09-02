@@ -29,7 +29,6 @@ node {
                 )
             }
         }
-
         stage ('Exec Maven') {
             steps {
                 rtMavenRun (
@@ -41,7 +40,6 @@ node {
                 )
             }
         }
-
         stage ('Publish build info') {
             steps {
                 rtPublishBuildInfo (
@@ -71,7 +69,3 @@ node {
         throw err
     }
 }
-
-
-
-
