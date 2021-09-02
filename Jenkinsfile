@@ -16,14 +16,14 @@ node {
 
                 rtMavenDeployer (
                     id: "MAVEN_DEPLOYER",
-                    serverId: "ARTIFACTORY_SERVER",
+                    serverId: "localhost",
                     releaseRepo: 'local-repo-maven',
                     snapshotRepo: 'local-repo-maven'
                 )
 
                 rtMavenResolver (
                     id: "MAVEN_RESOLVER",
-                    serverId: "ARTIFACTORY_SERVER",
+                    serverId: "localhost",
                     releaseRepo: 'local-repo-maven',
                     snapshotRepo: 'local-repo-maven'
                 )
@@ -33,7 +33,7 @@ node {
         stage ('Exec Maven') {
             steps {
                 rtMavenRun (
-                    //tool: MAVEN_TOOL, // Tool name from Jenkins configuration
+                    tool: MAVEN_TOOL, // Tool name from Jenkins configuration
                     pom: 'pom.xml',
                     goals: 'clean install',
                     deployerId: "MAVEN_DEPLOYER",
@@ -49,7 +49,7 @@ node {
                 )
             }
         }
-     /*   stage ('Build') {
+        stage ('Build') {
         	sh "echo 'shell scripts to build project...'"
         }
         stage ('Tests') {
@@ -65,7 +65,7 @@ node {
         }
       	stage ('Deploy') {
             sh "echo 'shell scripts to deploy to server...'"
-      	}*/
+      	}
     } catch (err) {
         currentBuild.result = 'FAILED'
         throw err
