@@ -18,15 +18,15 @@ pipeline {
                 rtMavenDeployer (
                     id: "MAVEN_DEPLOYER",
                     serverId: 'localhost',
-                    releaseRepo: 'local-repo-maven',
-                    snapshotRepo: 'local-repo-maven'
+                    releaseRepo: 'local-lib-maven',
+                    snapshotRepo: 'local-lib-maven'
                 )
 
                 rtMavenResolver (
                     id: "MAVEN_RESOLVER",
                     serverId: 'localhost',
-                    releaseRepo: 'local-repo-maven',
-                    snapshotRepo: 'local-repo-maven'
+                    releaseRepo: 'local-lib-maven',
+                    snapshotRepo: 'local-lib-maven'
                 )
             }
         }
