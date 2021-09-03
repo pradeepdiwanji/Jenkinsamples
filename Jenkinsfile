@@ -4,7 +4,6 @@ pipeline {
         stage ('Clone') {
             steps {
                git branch: 'master', url: "https://github.com/jfrog/project-examples.git"
-               //checkout scm
             }
         }
 
@@ -56,3 +55,4 @@ pipeline {
             }
         }
     }
+}
