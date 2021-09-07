@@ -42,8 +42,8 @@ pipeline {
                     tool: 'Maven3', // Tool name from Jenkins configuration
                     pom: 'maven-examples/maven-example/pom.xml',
                     goals: 'clean compile install -DskipTests',
-                    deployerId: "MAVEN_DEPLOYER",
-                    resolverId: "MAVEN_RESOLVER"
+                    //deployerId: "MAVEN_DEPLOYER",
+                    //resolverId: "MAVEN_RESOLVER"
                 )
             }
         }
