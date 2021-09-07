@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage ('Clone') {
             steps {
-                git branch: 'master', url: "https://github.com/pradeepdiwanji/spring-petclinic.git"
+                git branch: 'master', url: "https://github.com/jfrog/project-examples.git"
             }
         }
 
@@ -39,7 +39,7 @@ pipeline {
             steps {
                 rtMavenRun (
                     tool: 'Maven3', // Tool name from Jenkins configuration
-                    pom: 'pom.xml',
+                    pom: 'maven-examples/maven-example/pom.xml',
                     goals: 'clean install -U',
                     //deployerId: 'MAVEN_DEPLOYER',
                     //resolverId: 'MAVEN_RESOLVER'
