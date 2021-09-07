@@ -17,7 +17,7 @@ pipeline {
 
                 rtMavenDeployer (
                     id: 'MAVEN_DEPLOYER',
-                    serverId: 'jfrogArtifactory',
+                    serverId: 'JfrogArtifactory',
                     releaseRepo: 'sample-libs-release-local',
                     snapshotRepo: 'sample-libs-snapshot-local'
                 )
