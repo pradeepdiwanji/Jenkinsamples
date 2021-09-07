@@ -28,7 +28,7 @@ pipeline {
                     releaseRepo: 'sample-libs-release-local',
                     snapshotRepo: 'sample-libs-snapshot-local'
                 )
-                
+              }  
         }
 
 
