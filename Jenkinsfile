@@ -38,7 +38,7 @@ pipeline {
                    }
             steps {
                 rtMavenRun (
-                    tool: Maven3, // Tool name from Jenkins configuration
+                    tool: 'Maven3', // Tool name from Jenkins configuration
                     pom: 'maven-examples/maven-example/pom.xml',
                     goals: 'clean install -U',
                     deployerId: 'MAVEN_DEPLOYER',
