@@ -41,8 +41,8 @@ pipeline {
                     tool: 'Maven3', // Tool name from Jenkins configuration
                     pom: 'maven-examples/maven-example/pom.xml',
                     goals: 'clean install -U',
-                    deployerId: 'MAVEN_DEPLOYER',
-                    resolverId: 'MAVEN_RESOLVER'
+                    //deployerId: 'MAVEN_DEPLOYER',
+                    //resolverId: 'MAVEN_RESOLVER'
                 )
             }
         }
