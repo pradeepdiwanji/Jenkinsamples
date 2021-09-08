@@ -59,6 +59,11 @@ pipeline {
             steps {
                 xrayScan (
                     serverId: "JfrogArtifactory",
+                    buildName: 'JenkinsSample',
+                    //buildNumber: '17',
+                    //project: 'rfact',   
+                    failBuild: false
+                    //publish: true
                     failBuild: false
                 )
             }
