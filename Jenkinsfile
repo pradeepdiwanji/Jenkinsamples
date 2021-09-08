@@ -27,6 +27,9 @@ node {
     }
 
     stage ('Exec Maven') {
+        environment {
+               JAVA_HOME= '/Applications/Eclipse JEE.app/Contents/Eclipse/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.macosx.x86_64_16.0.1.v20210528-1205/jre'
+         }
         rtMaven.run pom: 'maven-examples/maven-jib-example/pom.xml', 
         goals: 'clean install', 
         buildInfo: buildInfo
