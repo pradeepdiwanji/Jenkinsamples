@@ -9,7 +9,7 @@ node {
 
     stage ('Artifactory configuration') {
         // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
-        server = 'JfrogArtifactory'
+        server = Artifactory.server 'JfrogArtifactory'
 
         rtMaven = Artifactory.newMavenBuild()
         // Tool name from Jenkins configuration
@@ -17,11 +17,11 @@ node {
         
         rtMaven.deployer releaseRepo: 'sample-libs-release-local', 
         snapshotRepo: 'sample-libs-snapshot-local', 
-        server: 'JfrogArtifactory'
+        server: server
         
         rtMaven.resolver releaseRepo: 'sample-libs-release', 
         snapshotRepo: 'sample-libs-release', 
-        server: 'JfrogArtifactory' 
+        server: server 
         
         buildInfo = Artifactory.newBuildInfo()
     }
