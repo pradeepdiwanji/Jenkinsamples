@@ -9,18 +9,24 @@ node {
 
     stage ('Artifactory configuration') {
         // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
-        server = rtifactory.server JfrogArtifactory
+        server = 'JfrogArtifactory'
 
         rtMaven = Artifactory.newMavenBuild()
         // Tool name from Jenkins configuration
-        rtMaven.tool = Maven3
-        rtMaven.deployer releaseRepo: 'sample-libs-release-local', snapshotRepo: sample-libs-snapshot-local, server: server
-        rtMaven.resolver releaseRepo: 'sample-libs-release', snapshotRepo: 'sample-libs-release', server: server
+        rtMaven.tool = 'Maven3'
+        rtMaven.deployer releaseRepo: 'sample-libs-release-local', 
+        snapshotRepo: 'sample-libs-snapshot-local', 
+        server: 'JfrogArtifactory',
+        rtMaven.resolver releaseRepo: 'sample-libs-release', 
+        snapshotRepo: 'sample-libs-release', 
+        server: 'JfrogArtifactory' ,
         buildInfo = Artifactory.newBuildInfo()
     }
 
     stage ('Exec Maven') {
-        rtMaven.run pom: 'maven-examples/maven-jib-example/pom.xml', goals: 'clean install', buildInfo: buildInfo
+        rtMaven.run pom: 'maven-examples/maven-jib-example/pom.xml', 
+        goals: 'clean install', 
+        buildInfo: buildInfo
     }
 
     stage ('Publish build info') {
