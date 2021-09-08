@@ -14,12 +14,15 @@ node {
         rtMaven = Artifactory.newMavenBuild()
         // Tool name from Jenkins configuration
         rtMaven.tool = 'Maven3'
+        
         rtMaven.deployer releaseRepo: 'sample-libs-release-local', 
         snapshotRepo: 'sample-libs-snapshot-local', 
-        server: 'JfrogArtifactory',
+        server: 'JfrogArtifactory'
+        
         rtMaven.resolver releaseRepo: 'sample-libs-release', 
         snapshotRepo: 'sample-libs-release', 
-        server: 'JfrogArtifactory' ,
+        server: 'JfrogArtifactory' 
+        
         buildInfo = Artifactory.newBuildInfo()
     }
 
