@@ -64,7 +64,7 @@ pipeline {
                     //project: 'rfact',   
                     failBuild: false
                     //publish: true
-                    failBuild: false
+                    
                 )
             }
         }
