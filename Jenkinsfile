@@ -1,72 +1,39 @@
-pipeline {
-    agent any
-    stages {
-        stage ('Clone') {
-            steps {
-                git branch: 'master', url: "https://github.com/jfrog/project-examples.git"
-            }
-        }
+node {
+    def server
+    def rtMaven
+    def buildInfo
 
-        stage ('Artifactory configuration') {
-            steps {
-                rtServer (
-                    id: 'JfrogArtifactory',
-                    url: 'http://34.71.215.160:8082/artifactory',
-                    credentialsId: 'admin_pradeep_artifactory'
-                )
+    stage ('Clone') {
+        git url: 'https://github.com/jfrog/project-examples.git'
+    }
 
-                rtMavenDeployer (
-                    id: 'MAVEN_DEPLOYER',
-                    serverId: 'JfrogArtifactory',
-                    releaseRepo: 'sample-libs-release-local',
-                    snapshotRepo: 'sample-libs-snapshot-local'
-                )
+    stage ('Artifactory configuration') {
+        // Obtain an Artifactory server instance, defined in Jenkins --> Manage Jenkins --> Configure System:
+        server = Artifactory.JfrogArtifactory
 
-                rtMavenResolver (
-                    id: 'MAVEN_RESOLVER',
-                    serverId: "JfrogArtifactory",
-                    releaseRepo: 'sample-libs-release-local',
-                    snapshotRepo: 'sample-libs-snapshot-local'
-                )
-            }
-        }
+        rtMaven = Artifactory.newMavenBuild()
+        // Tool name from Jenkins configuration
+        rtMaven.tool = Maven3
+        rtMaven.deployer releaseRepo: 'sample-libs-release-local', snapshotRepo: sample-libs-snapshot-local, server: server
+        rtMaven.resolver releaseRepo: 'sample-libs-release', snapshotRepo: 'sample-libs-release', server: server
+        buildInfo = Artifactory.newBuildInfo()
+    }
 
-        stage ('Exec Maven') {
-        environment {
-                   //MAVEN_HOME = '/usr/local/Cellar/maven/3.8.2/libexec'
-                   JAVA_HOME= '/Applications/Eclipse JEE.app/Contents/Eclipse/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.macosx.x86_64_16.0.1.v20210528-1205/jre'
-                   }
-            steps {
-                rtMavenRun (
-                    tool: 'Maven3', // Tool name from Jenkins configuration
-                    pom: 'maven-examples/maven-jib-example/pom.xml',
-                    goals: 'clean install -U',
-                    //deployerId: 'MAVEN_DEPLOYER',
-                    //resolverId: 'MAVEN_RESOLVER'
-                )
-            }
-        }
+    stage ('Exec Maven') {
+        rtMaven.run pom: 'maven-examples/maven-jib-example/pom.xml', goals: 'clean install', buildInfo: buildInfo
+    }
 
-        stage ('Publish build info') {
-            steps {
-                rtPublishBuildInfo (
-                    serverId: "JfrogArtifactory"
-                )
-            }
-        }
+    stage ('Publish build info') {
+        server.publishBuildInfo buildInfo
+    }
 
-        stage ('Xray scan') {
-            steps {
-                xrayScan (
-                    serverId: "JfrogArtifactory",
-                    buildName: 'JenkinsSample',
-                    //buildNumber: '17',
-                    //project: 'rfact',   
-                    failBuild: false
-                    //publish: true
-                    
-                )
-            }
-        }
+    stage ('Xray scan') {
+        def scanConfig = [
+                'buildName'      : buildInfo.name,
+                'buildNumber'    : buildInfo.number,
+                'failBuild'      : true
+        ]
+        def scanResult = server.xrayScan scanConfig
+        echo scanResult as String
     }
 }
